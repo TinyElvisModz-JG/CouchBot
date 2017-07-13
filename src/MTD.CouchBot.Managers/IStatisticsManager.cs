@@ -22,5 +22,11 @@ namespace MTD.CouchBot.Managers
         void AddRandomInt(int random);
         void ClearRandomInts();
         int GetHaiBaiCount();
+        int GetFlipCount();
+        void AddToFlipCount();
+        int GetUnflipCount();
+        void AddToUnflipCount();
+        void AddToVidMeAlertCount();
+        int GetVidMeAlertCount();
     }
 }

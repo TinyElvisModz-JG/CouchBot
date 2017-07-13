@@ -3,12 +3,13 @@
     "DiscordToken": "DISCORDTOKEN",
     "TwitchClientId": "TWITCHID",
     "YouTubeApiKey": "YOUTUBEAPI",
-    "ApiAiKey": "APIAIKEY" 
+    "ApiAiKey": "APIAIKEY"
   },
   "BotConfiguration": {
     "CouchBotId": 0,
     "Prefix": "",
-    "TotalShards":  1
+    "TotalShards": 1,
+    "OwnerId": 0
   },
   "Directories": {
     "ConfigRootDirectory": "C:\\programdata\\CouchBot\\",
@@ -36,6 +37,6 @@
     "TwitchFeed": 300,
     "YouTubePublished": 900,
     "YouTubeLive": 300,
-    "VidMe":  900
+    "VidMe": 900
   }
 }

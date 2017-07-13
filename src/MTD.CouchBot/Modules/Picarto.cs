@@ -2,6 +2,7 @@
 using Discord.Commands;
 using MTD.CouchBot.Domain;
 using MTD.CouchBot.Domain.Models.Bot;
+using MTD.CouchBot.Domain.Utilities;
 using MTD.CouchBot.Managers;
 using MTD.CouchBot.Managers.Implementations;
 using MTD.CouchBot.Modules;
@@ -59,7 +60,7 @@ namespace MTD.DiscordBot.Modules
             if (!server.PicartoChannels.Contains(channelName.ToLower()))
             {
                 server.PicartoChannels.Add(channelName.ToLower());
-                File.WriteAllText(file, JsonConvert.SerializeObject(server));
+                await BotFiles.SaveDiscordServer(server, Context.Guild);
                 await Context.Channel.SendMessageAsync("Added " + channelName + " to the server Picarto streamer list.");
             }
             else
@@ -88,7 +89,7 @@ namespace MTD.DiscordBot.Modules
             if (server.PicartoChannels.Contains(channel.ToLower()))
             {
                 server.PicartoChannels.Remove(channel.ToLower());
-                File.WriteAllText(file, JsonConvert.SerializeObject(server));
+                await BotFiles.SaveDiscordServer(server, Context.Guild);
                 await Context.Channel.SendMessageAsync("Removed " + channel + " from the server Picarto streamer list.");
             }
             else
@@ -128,7 +129,7 @@ namespace MTD.DiscordBot.Modules
             }
 
             server.OwnerPicartoChannel = channelName;
-            File.WriteAllText(file, JsonConvert.SerializeObject(server));
+            await BotFiles.SaveDiscordServer(server, Context.Guild);
             await Context.Channel.SendMessageAsync("Owner Picarto Channel has been set to " + channelName + ".");
         }
 
@@ -147,7 +148,7 @@ namespace MTD.DiscordBot.Modules
                 server = JsonConvert.DeserializeObject<DiscordServer>(File.ReadAllText(file));
 
             server.OwnerPicartoChannel = null;
-            File.WriteAllText(file, JsonConvert.SerializeObject(server));
+            await BotFiles.SaveDiscordServer(server, Context.Guild);
             await Context.Channel.SendMessageAsync("Owner Picarto Channel has been reset.");
         }
 

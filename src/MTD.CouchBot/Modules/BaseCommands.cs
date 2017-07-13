@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace MTD.CouchBot.Modules
 {
-    public class BaseCommands : ModuleBase
+    public class BaseCommands : BaseModule
     {
         IStatisticsManager statisticsManager;
         IYouTubeManager youtubeManager;
@@ -38,6 +38,7 @@ namespace MTD.CouchBot.Modules
             var serverPicartoCount = 0;
             var twitchGameCount = 0;
             var twitchTeamCount = 0;
+            var vidMeCount = 0;
 
             foreach (var s in serverFiles)
             {
@@ -51,12 +52,22 @@ namespace MTD.CouchBot.Modules
                     }
                 }
 
+                if(!string.IsNullOrEmpty(server.OwnerPicartoChannel))
+                {
+                    serverPicartoCount++;
+                }
+
                 if (server.ServerBeamChannels != null)
                 {
                     foreach (var u in server.ServerBeamChannels)
                     {
                         serverBeamCount++;
                     }
+                }
+
+                if (!string.IsNullOrEmpty(server.OwnerBeamChannel))
+                {
+                    serverBeamCount++;
                 }
 
                 if (server.ServerTwitchChannelIds != null)
@@ -67,12 +78,22 @@ namespace MTD.CouchBot.Modules
                     }
                 }
 
+                if (!string.IsNullOrEmpty(server.OwnerTwitchChannel))
+                {
+                    serverTwitchCount++;
+                }
+
                 if (server.ServerYouTubeChannelIds != null)
                 {
                     foreach (var u in server.ServerYouTubeChannelIds)
                     {
                         serverYouTubeCount++;
                     }
+                }
+
+                if (!string.IsNullOrEmpty(server.OwnerYouTubeChannelId))
+                {
+                    serverYouTubeCount++;
                 }
 
                 if (server.ServerHitboxChannels != null)
@@ -83,9 +104,27 @@ namespace MTD.CouchBot.Modules
                     }
                 }
 
-                if(server.TwitchTeams != null)
+                if (!string.IsNullOrEmpty(server.OwnerHitboxChannel))
                 {
-                    foreach(var t in server.TwitchTeams)
+                    serverHitboxCount++;
+                }
+
+                if (server.ServerVidMeChannelIds != null)
+                {
+                    foreach (var u in server.ServerVidMeChannelIds)
+                    {
+                        vidMeCount++;
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(server.OwnerVidMeChannel))
+                {
+                    vidMeCount++;
+                }
+
+                if (server.TwitchTeams != null)
+                {
+                    foreach (var t in server.TwitchTeams)
                     {
                         twitchTeamCount++;
                     }
@@ -102,7 +141,7 @@ namespace MTD.CouchBot.Modules
 
             int serverCount = 0;
 
-            foreach(var shard in Program.client.Shards)
+            foreach (var shard in Program.client.Shards)
             {
                 serverCount += shard.Guilds.Count;
             }
@@ -119,6 +158,7 @@ namespace MTD.CouchBot.Modules
                           "-- Twitch: " + serverTwitchCount + "\r\n" +
                           "-- Twitch Games: " + twitchGameCount + "\r\n" +
                           "-- Twitch Teams: " + twitchTeamCount + "\r\n" +
+                          "-- Vid.me: " + vidMeCount + "\r\n" +
                           "-- YouTube: " + serverYouTubeCount + "\r\n" +
                           "-- Total Channels Checked: " + (serverYouTubeCount + serverTwitchCount + serverBeamCount + serverHitboxCount + serverPicartoCount) + "\r\n" +
                           "- Current Memory Usage: " + ((System.Diagnostics.Process.GetCurrentProcess().WorkingSet64 / 1024) / 1024) + "MB \r\n" +
@@ -130,35 +170,45 @@ namespace MTD.CouchBot.Modules
 
             await Context.Channel.SendMessageAsync(info);
         }
-        
+
         [Command("servers"), Summary("Get Server Statistic Information.")]
         public async Task Servers()
         {
             var serverFiles = Directory.GetFiles(Constants.ConfigRootDirectory + Constants.GuildDirectory);
+
+            int serverCount = 0;
+
+            foreach (var shard in Program.client.Shards)
+            {
+                serverCount += shard.Guilds.Count;
+            }
 
             List<ulong> serversUsingNone = new List<ulong>();
             List<ulong> serversUsingGoLive = new List<ulong>();
             List<ulong> serversUsingAnnouncements = new List<ulong>();
             List<ulong> serversUsingPublished = new List<ulong>();
             List<ulong> serversUsingGreetings = new List<ulong>();
+            List<ulong> serversUsingTeams = new List<ulong>();
+            List<ulong> serversUsingGames = new List<ulong>();
+            List<ulong> serversUsingFeeds = new List<ulong>();
 
             foreach (var s in serverFiles)
             {
                 var server = JsonConvert.DeserializeObject<DiscordServer>(File.ReadAllText(s));
 
-                if(server.GoLiveChannel != 0)
+                if (server.GoLiveChannel != 0 || server.OwnerLiveChannel != 0)
                 {
                     serversUsingGoLive.Add(server.Id);
                 }
 
-                if (server.AnnouncementsChannel != 0)
-                {
-                    serversUsingAnnouncements.Add(server.Id);
-                }
-
-                if (server.PublishedChannel != 0)
+                if (server.PublishedChannel != 0 || server.OwnerPublishedChannel != 0)
                 {
                     serversUsingPublished.Add(server.Id);
+                }
+
+                if(server.TwitchFeedChannel != 0 || server.OwnerTwitchFeedChannel != 0)
+                {
+                    serversUsingFeeds.Add(server.Id);
                 }
 
                 if (server.GreetingsChannel != 0)
@@ -166,7 +216,19 @@ namespace MTD.CouchBot.Modules
                     serversUsingGreetings.Add(server.Id);
                 }
 
-                if (server.GoLiveChannel == 0 && server.AnnouncementsChannel == 0 && server.PublishedChannel == 0 && server.GreetingsChannel == 0)
+                if(server.TwitchTeams != null && server.TwitchTeams.Count > 0)
+                {
+                    serversUsingTeams.Add(server.Id);
+                }
+
+                if (server.ServerGameList != null && server.ServerGameList.Count > 0)
+                {
+                    serversUsingGames.Add(server.Id);
+                }
+
+                if (server.GoLiveChannel == 0 && server.OwnerLiveChannel == 0
+                    && server.PublishedChannel == 0 && server.OwnerPublishedChannel == 0
+                    && server.GreetingsChannel == 0 && server.OwnerTwitchFeedChannel == 0 && server.TwitchFeedChannel == 0)
                 {
                     serversUsingNone.Add(server.Id);
                 }
@@ -174,11 +236,14 @@ namespace MTD.CouchBot.Modules
 
             string info = "```Markdown\r\n" +
                           "# " + Program.client.CurrentUser.Username + "\r\n" +
-                          "- Servers: " + serverFiles.Length + "\r\n" +
+                          "- Connected Servers: " + serverCount + "\r\n" +
+                          "- Server Configurations: " + serverFiles.Length + "\r\n" +
                           "- Servers Announcing Livestreams: " + serversUsingGoLive.Count + "\r\n" +
-                          "- Servers Announcing Announcements: " + serversUsingAnnouncements.Count + "\r\n" +
                           "- Servers Announcing Published Content: " + serversUsingPublished.Count + "\r\n" +
                           "- Servers Announcing Greetings: " + serversUsingGreetings.Count + "\r\n" +
+                          "- Servers Announcing Twitch Channel Feeds: " + serversUsingFeeds.Count + "\r\n" +
+                          "- Servers Announcing Twitch Games: " + serversUsingGames.Count + "\r\n" +
+                          "- Servers Announcing Twitch Teams: " + serversUsingTeams.Count + "\r\n" +
                           "- Servers Announcing Nothing: " + serversUsingNone.Count + "\r\n" +
                           "```\r\n";
 
@@ -204,7 +269,7 @@ namespace MTD.CouchBot.Modules
         [Command("invite"), Summary("Provide an invite link via DM.")]
         public async Task Invite()
         {
-            await (await ((IGuildUser)(Context.Message.Author)).CreateDMChannelAsync()).SendMessageAsync("Want me to join your server? Click here: <https://discordapp.com/oauth2/authorize?client_id=308371905667137536&scope=bot&permissions=158720>");
+            await (await ((IGuildUser)(Context.Message.Author)).GetOrCreateDMChannelAsync()).SendMessageAsync("Want me to join your server? Click here: <https://discordapp.com/oauth2/authorize?client_id=308371905667137536&scope=bot&permissions=158720>");
         }
 
         [Command("uptime"), Summary("Get Uptime Statistic Information.")]
@@ -237,13 +302,14 @@ namespace MTD.CouchBot.Modules
                     "Picarto - " + botStats.PicartoAlertCount + "\r\n" +
                     "Smashcast - " + botStats.HitboxAlertCount + "\r\n" +
                     "Twitch - " + botStats.TwitchAlertCount + "\r\n" +
+                    "Vid.me - " + botStats.VidMeAlertCount + "\r\n" +
                     "YouTube - " + botStats.YouTubeAlertCount + "\r\n" +
                     "Total Alerts Sent - " + (botStats.YouTubeAlertCount + botStats.BeamAlertCount + botStats.TwitchAlertCount + botStats.HitboxAlertCount) + "\r\n" +
                     "```\r\n";
 
             await Context.Channel.SendMessageAsync(info);
         }
-        
+
         [Command("supporters"), Summary("Get Supporter Information")]
         public async Task Supporters()
         {
@@ -255,12 +321,12 @@ namespace MTD.CouchBot.Modules
                           "just in it's use. Thanks to all those out there that have used it, provided feedback, found bugs, and supported me through Patreon.\r\n\r\n" +
                           "Patron List:\r\n";
 
-            foreach(var s in supporters)
+            foreach (var s in supporters)
             {
                 info += "- " + s + "\r\n";
             }
 
-            info +=  "- Your Name Could Be Here. Visit <http://patreon.com/dawgeth> today <3" +
+            info += "- Your Name Could Be Here. Visit <http://patreon.com/dawgeth> today <3" +
                      "- Want to be a one time supporter? <http://paypal.me/dawgeth>" +
                      "```\r\n";
 
@@ -278,7 +344,8 @@ namespace MTD.CouchBot.Modules
             {
                 await Context.Channel.SendMessageAsync("No Results Found.");
             }
-            else {
+            else
+            {
 
                 string channelInfo = "```\r\n";
                 foreach (var channel in channels.items)
@@ -312,10 +379,34 @@ namespace MTD.CouchBot.Modules
             await Context.Channel.SendMessageAsync("", false, builder.Build());
         }
 
+        [Command("flip")]
+        public async Task Flip()
+        {
+            statisticsManager.AddToFlipCount();
+
+            EmbedBuilder builder = new EmbedBuilder();
+
+            builder.Description = "(╯°□°）╯︵ <:CouchBotSemi10:312758619475279893>\r\n\r\nFlip Count: " + statisticsManager.GetFlipCount();
+
+            await Context.Channel.SendMessageAsync("", false, builder.Build());
+        }
+
+        [Command("unflip")]
+        public async Task Unflip()
+        {
+            statisticsManager.AddToUnflipCount();
+
+            EmbedBuilder builder = new EmbedBuilder();
+
+            builder.Description = "<:couchbot:312752764247736320> ノ( ゜-゜ノ)\r\n\r\nUnflip Count: " + statisticsManager.GetUnflipCount();
+
+            await Context.Channel.SendMessageAsync("", false, builder.Build());
+        }
+
         [Command("setbotgame")]
         public async Task SetBotGame(string game)
         {
-            if(Context.User.Id != 93015586698727424)
+            if (Context.User.Id != 93015586698727424)
             {
                 await Context.Channel.SendMessageAsync("*Bbbbbzzztttt* You are not *zzzzt* Dawgeth. Acc *bbrrrttt* Access Denied.");
 
@@ -378,6 +469,183 @@ namespace MTD.CouchBot.Modules
         public async Task Ping()
         {
             await Context.Channel.SendMessageAsync("Pong!");
+        }
+
+        [Command("purge")]
+        public async Task Purge(IGuildUser user)
+        {
+            var deleteList = new List<IMessage>();
+
+            if (!IsAdmin)
+            {
+                return;
+            }
+
+            var messages = Context.Channel.GetMessagesAsync(100);
+
+            var message = (await messages.Flatten()).GetEnumerator();
+
+            while (message.MoveNext())
+            {
+                if (message.Current.Author.Id == user.Id)
+                {
+                    deleteList.Add(message.Current);
+                }
+            }
+
+
+            if (deleteList.Count > 0)
+            {
+                await Context.Channel.DeleteMessagesAsync(deleteList);
+                await Context.Message.DeleteAsync();
+            }
+        }
+
+        [Command("purgeall")]
+        public async Task PurgeAll()
+        {
+            var deleteList = new List<IMessage>();
+
+            if (!IsAdmin)
+            {
+                return;
+            }
+
+            var messages = Context.Channel.GetMessagesAsync(100);
+
+            var message = (await messages.Flatten()).GetEnumerator();
+
+            while (message.MoveNext())
+            {
+                deleteList.Add(message.Current);
+            }
+
+            if (deleteList.Count > 0)
+            {
+                await Context.Channel.DeleteMessagesAsync(deleteList);
+            }
+        }
+
+        [Command("purgeservers")]
+        public async Task PurgeServers()
+        {
+            if (Context.User.Id != Constants.OwnerId)
+            {
+                return;
+            }
+
+            List<ulong> toKeep = new List<ulong>();
+            List<ulong> toDelete = new List<ulong>();
+            List<IGuild> guilds = new List<IGuild>();
+
+            var files = BotFiles.GetConfiguredServerFileNames();
+
+            foreach (var shard in Program.client.Shards)
+            {
+                foreach (var guild in shard.Guilds)
+                {
+                    if (!guilds.Contains(guild))
+                    {
+                        guilds.Add(guild);
+                    }
+                }
+            }
+
+            foreach (var guild in guilds)
+            {
+                if(files.Contains(guild.Id.ToString()))
+                {
+                    toKeep.Add(guild.Id);
+                }
+            }
+
+            foreach (var file in files)
+            {
+                Console.WriteLine("File: " + file);
+                if (!toKeep.Contains(ulong.Parse(file)))
+                {
+                    toDelete.Add(ulong.Parse(file));
+                }
+            }
+
+            foreach (var server in toDelete)
+            {
+                File.Move(Constants.ConfigRootDirectory + Constants.GuildDirectory + @"\" + server + ".json", @"C:\temp\" + server + ".json");
+            }
+        }
+
+        [Command("muppet")]
+        public async Task Muppet()
+        {
+            if (Context.User.Id != Constants.OwnerId)
+            {
+                return;
+            }
+
+            List<ulong> configExists = new List<ulong>();
+            List<ulong> configDoesntExist = new List<ulong>();
+            List<IGuild> guilds = new List<IGuild>();
+
+            var files = BotFiles.GetConfiguredServerFileNames();
+
+            foreach (var shard in Program.client.Shards)
+            {
+                foreach(var guild in shard.Guilds)
+                {
+                    if(!guilds.Contains(guild))
+                    {
+                        guilds.Add(guild);
+                    }
+                }
+            }
+
+            await Context.Channel.SendMessageAsync("Checking " + guilds.Count + " Guilds.");
+
+            foreach (var guild in guilds)
+            {
+                if (!files.Contains(guild.Id.ToString()))
+                {
+                    configDoesntExist.Add(guild.Id);
+                }
+            }
+
+            var message = "```";
+
+            foreach(var guild in configDoesntExist)
+            {
+                var g = await Context.Client.GetGuildAsync(guild);
+                var o = await g.GetOwnerAsync();
+
+                message += "Name: " + g.Name + " (" + g.Id + ") - Owner: " + o.Username + " (" + o.Id + ")\r\n";
+            }
+
+            message += "```";
+
+            await Context.Channel.SendMessageAsync(message);
+        }
+
+        [Command("leaveservers")]
+        public async Task LeaveServers()
+        {
+            if (Context.User.Id != Constants.OwnerId)
+            {
+                return;
+            }
+
+            var serverFiles = Directory.GetFiles(Constants.ConfigRootDirectory + Constants.GuildDirectory);
+
+            foreach (var s in serverFiles)
+            {
+                var server = JsonConvert.DeserializeObject<DiscordServer>(File.ReadAllText(s));
+
+                if (server.GoLiveChannel == 0 && server.OwnerLiveChannel == 0
+                && server.PublishedChannel == 0 && server.OwnerPublishedChannel == 0
+                && server.GreetingsChannel == 0 && server.OwnerTwitchFeedChannel == 0 && server.TwitchFeedChannel == 0)
+                {
+                    var guild = await Context.Client.GetGuildAsync(server.Id);
+                    await guild.LeaveAsync();
+                }
+            }
         }
     }
 }

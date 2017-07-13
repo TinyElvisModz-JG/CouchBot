@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MTD.CouchBot.Domain.Models.VidMe
 {
-    public class VidMeChannelVideos
+    public class VidMeUserVideos
     {
         public class Page
         {
@@ -123,16 +123,8 @@ namespace MTD.CouchBot.Domain.Models.VidMe
             public int? total_tipped { get; set; }
         }
 
-        public class Watching
-        {
-            public int __invalid_name__15441678 { get; set; }
-            public int __invalid_name__15647145 { get; set; }
-        }
-
         public bool status { get; set; }
         public Page page { get; set; }
         public List<Video> videos { get; set; }
-        public Watching watching { get; set; }
-        public List<object> viewerVotes { get; set; }
     }
 }

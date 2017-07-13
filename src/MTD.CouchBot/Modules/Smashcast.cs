@@ -2,6 +2,7 @@
 using MTD.CouchBot.Bot;
 using MTD.CouchBot.Domain;
 using MTD.CouchBot.Domain.Models.Bot;
+using MTD.CouchBot.Domain.Utilities;
 using MTD.CouchBot.Managers;
 using MTD.CouchBot.Managers.Implementations;
 using MTD.CouchBot.Models.Bot;
@@ -62,7 +63,7 @@ namespace MTD.DiscordBot.Modules
             if (!server.ServerHitboxChannels.Contains(channelName.ToLower()))
             {
                 server.ServerHitboxChannels.Add(channelName.ToLower());
-                File.WriteAllText(file, JsonConvert.SerializeObject(server));
+                await BotFiles.SaveDiscordServer(server, Context.Guild);
                 await Context.Channel.SendMessageAsync("Added " + channelName + " to the server Smashcast streamer list.");
             }
             else
@@ -94,7 +95,7 @@ namespace MTD.DiscordBot.Modules
             if (server.ServerHitboxChannels.Contains(channel.ToLower()))
             {
                 server.ServerHitboxChannels.Remove(channel.ToLower());
-                File.WriteAllText(file, JsonConvert.SerializeObject(server));
+                await BotFiles.SaveDiscordServer(server, Context.Guild);
                 await Context.Channel.SendMessageAsync("Removed " + channel + " from the server Smashcast streamer list.");
             }
             else
@@ -134,7 +135,7 @@ namespace MTD.DiscordBot.Modules
             }
 
             server.OwnerHitboxChannel = channelName;
-            File.WriteAllText(file, JsonConvert.SerializeObject(server));
+            await BotFiles.SaveDiscordServer(server, Context.Guild);
             await Context.Channel.SendMessageAsync("Owner Smashcast Channel has been set to " + channelName + ".");
 
         }
@@ -154,7 +155,7 @@ namespace MTD.DiscordBot.Modules
                 server = JsonConvert.DeserializeObject<DiscordServer>(File.ReadAllText(file));
 
             server.OwnerHitboxChannel = null;
-            File.WriteAllText(file, JsonConvert.SerializeObject(server));
+            await BotFiles.SaveDiscordServer(server, Context.Guild);
             await Context.Channel.SendMessageAsync("Owner Smashcast Channel has been reset.");
         }
 
