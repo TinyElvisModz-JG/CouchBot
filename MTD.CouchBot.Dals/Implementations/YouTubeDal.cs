@@ -131,7 +131,7 @@ namespace MTD.CouchBot.Dals.Implementations
                 return null;
             }
 
-            var start = str.IndexOf(url);
+            var start = str.IndexOf(url, StringComparison.CurrentCultureIgnoreCase);
             str = str.Substring(start);
             str = str.Replace(url, "");
             start = str.IndexOf('"');
