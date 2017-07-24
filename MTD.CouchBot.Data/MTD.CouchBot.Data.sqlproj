@@ -78,6 +78,6 @@
     <Build Include="Schemas\Discord.sql" />
     <Build Include="Schemas\Live.sql" />
     <Build Include="Schemas\Platform.sql" />
-    <Build Include="Script.PostDeployment1.sql" />
+    <PostDeploy Include="Script.PostDeployment1.sql" />
   </ItemGroup>
 </Project>
