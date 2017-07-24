@@ -28,7 +28,7 @@ namespace MTD.CouchBot.Bot
 
         private async Task DoBotStuff()
         {
-            _client = new DiscordShardedClient(new DiscordSocketConfig()
+            _client = new DiscordShardedClient(new DiscordSocketConfig
             {
                 TotalShards = 2
             });
@@ -40,7 +40,7 @@ namespace MTD.CouchBot.Bot
             await _client.LoginAsync(TokenType.Bot, _config.GetSection("Credentials")["DiscordToken"]);
             await _client.StartAsync();
 
-            await Task.Delay(-1);
+            await Task.Delay(-1).ConfigureAwait(false);
         }
 
         private IConfiguration BuildConfig()
