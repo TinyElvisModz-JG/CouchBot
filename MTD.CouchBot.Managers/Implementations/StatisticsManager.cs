@@ -131,7 +131,7 @@ namespace MTD.CouchBot.Managers.Implementations
 
         public int GetVidMeAlertCount()
         {
-            return GetVidMeAlertCount();
+            return _statisticsDal.GetVidMeAlertCount();
         }
     }
 }
