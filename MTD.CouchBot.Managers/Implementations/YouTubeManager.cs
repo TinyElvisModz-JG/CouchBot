@@ -7,7 +7,7 @@ namespace MTD.CouchBot.Managers.Implementations
 {
     public class YouTubeManager : IYouTubeManager
     {
-        IYouTubeDal _youtubeDal;
+        private readonly IYouTubeDal _youtubeDal;
 
         public YouTubeManager(YouTubeDal youtubeDal)
         {

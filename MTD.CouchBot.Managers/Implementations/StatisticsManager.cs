@@ -7,7 +7,7 @@ namespace MTD.CouchBot.Managers.Implementations
 {
     public class StatisticsManager : IStatisticsManager
     {
-        IStatisticsDal _statisticsDal;
+        private readonly IStatisticsDal _statisticsDal;
 
         public StatisticsManager(StatisticsDal statisticsDal)
         {

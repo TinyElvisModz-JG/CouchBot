@@ -28,28 +28,36 @@ namespace MTD.CouchBot.Bot.Services
         {
             _provider = provider;
             await _commands.AddModulesAsync(Assembly.GetEntryAssembly());
-            var test = _commands.Commands;
         }
 
         private async Task MessageReceived(SocketMessage rawMessage)
         {
-            if (!(rawMessage is SocketUserMessage message)) return;
-            if (message.Source != Discord.MessageSource.User) return;
+            if (!(rawMessage is SocketUserMessage message))
+            {
+                return;
+            }
+
+            if (message.Source != Discord.MessageSource.User)
+            {
+                return;
+            }
 
             int argPos = 0;
-            if (!(message.HasMentionPrefix(_client.CurrentUser, ref argPos) || 
-                message.HasStringPrefix(_config.GetSection("BotSettings")["Prefix"] + " ", ref argPos))) return;
+            if (!(message.HasMentionPrefix(_client.CurrentUser, ref argPos) || message.HasStringPrefix(_config.GetSection("BotSettings")["Prefix"] + " ", ref argPos)))
+            {
+                return;
+            }
 
             var context = new ShardedCommandContext(_client, message);
             var result = await _commands.ExecuteAsync(context, argPos, _provider);
 
-            if(result.Error.HasValue &&
+            if (result.Error.HasValue &&
                 result.Error.Value != CommandError.UnknownCommand)
             {
                 await context.Channel.SendMessageAsync(result.ToString());
             }
 
-            else if(result.Error.HasValue &&
+            else if (result.Error.HasValue &&
                 result.Error.Value == CommandError.UnknownCommand)
             {
                 await context.Channel.SendMessageAsync("Invalid Command.");

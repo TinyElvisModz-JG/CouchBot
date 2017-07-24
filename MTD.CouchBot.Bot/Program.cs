@@ -23,7 +23,7 @@ namespace MTD.CouchBot.Bot
 
         public async Task Start()
         {
-            await DoBotStuff();
+            await DoBotStuff().ConfigureAwait(false);
         }
 
         private async Task DoBotStuff()

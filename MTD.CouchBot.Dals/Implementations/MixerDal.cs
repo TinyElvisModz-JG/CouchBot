@@ -27,7 +27,7 @@ namespace MTD.CouchBot.Dals.Implementations
 
         public async Task<MixerChannel> GetChannelById(string id)
         {
-            return await GetChannelByName(id);
+            return await GetChannelByName(id).ConfigureAwait(false);
         }
     }
 }

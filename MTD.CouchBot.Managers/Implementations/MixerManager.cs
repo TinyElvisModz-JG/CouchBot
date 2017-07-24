@@ -7,7 +7,7 @@ namespace MTD.CouchBot.Managers.Implementations
 {
     public class MixerManager : IMixerManager
     {
-        readonly IMixerDal _mixerDal;
+        private readonly IMixerDal _mixerDal;
 
         public MixerManager(MixerDal mixerDal)
         {

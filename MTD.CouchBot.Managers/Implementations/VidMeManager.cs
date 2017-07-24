@@ -7,7 +7,7 @@ namespace MTD.CouchBot.Managers.Implementations
 {
     public class VidMeManager : IVidMeManager
     {
-        IVidMeDal _vidMeDal;
+        private readonly IVidMeDal _vidMeDal;
 
         public VidMeManager(VidMeDal vidMeDal)
         {

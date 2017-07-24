@@ -7,7 +7,7 @@ namespace MTD.CouchBot.Managers.Implementations
 {
     public class PicartoManager : IPicartoManager
     {
-        IPicartoDal _picartoDal;
+        private readonly IPicartoDal _picartoDal;
 
         public PicartoManager(PicartoDal picartoDal)
         {

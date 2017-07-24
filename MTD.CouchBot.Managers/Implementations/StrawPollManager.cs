@@ -7,7 +7,7 @@ namespace MTD.CouchBot.Managers.Implementations
 {
     public class StrawPollManager : IStrawPollManager
     {
-        IStrawPollDal _strawPollDal;
+        private readonly IStrawPollDal _strawPollDal;
 
         public StrawPollManager(StrawPollDal strawPollDal)
         {
