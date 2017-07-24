@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Discord.Net" Version="1.0.2-build-00800" />
+    <PackageReference Include="Discord.Net.Commands" Version="1.0.2-build-00800" />
+    <PackageReference Include="Discord.Net.WebSocket" Version="1.0.2-build-00800" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="1.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="1.1.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="1.1.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="1.1.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="1.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MTD.CouchBot.Dals\MTD.CouchBot.Dals.csproj" />
+    <ProjectReference Include="..\MTD.CouchBot.Domain\MTD.CouchBot.Domain.csproj" />
+    <ProjectReference Include="..\MTD.CouchBot.Managers\MTD.CouchBot.Managers.csproj" />
+  </ItemGroup>
+
+</Project>

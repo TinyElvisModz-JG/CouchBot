@@ -1,1 +1,0 @@
-﻿INSERT INTO [Platform].[Platform] VALUES ('Beam', 'Mixer', 'Smashcast', 'Twitch', 'YouTube', 'YouTube Gaming');
