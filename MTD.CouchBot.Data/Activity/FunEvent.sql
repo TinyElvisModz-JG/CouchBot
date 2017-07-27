@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [Activity].[FunEvent]
 (
-	[Id] INT NOT NULL PRIMARY KEY, 
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
 	[ServerId] NUMERIC(20) NOT NULL,
 	[UserId] NUMERIC(20) NOT NULL,
 	[FunEventTypeId] INT NOT NULL,

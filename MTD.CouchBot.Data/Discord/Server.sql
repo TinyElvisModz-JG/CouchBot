@@ -1,15 +1,15 @@
 ﻿CREATE TABLE [Discord].[Server]
 (
 	[Id] NUMERIC(20) NOT NULL PRIMARY KEY,
-	[Name] nvarchar(128) NOT NULL,
 	[OwnerId] NUMERIC(20) NOT NULL,
-	[OwnerName] nvarchar(128) NOT NULL,
 	[AnnouncementsChannel] NUMERIC(20) NULL,
-	[GoLiveChannel] NUMERIC(20) NULL,
+	[LiveChannel] NUMERIC(20) NULL,
 	[GreetingsChannel] NUMERIC(20) NULL,
 	[OwnerLiveChannel] NUMERIC(20) NULL,
 	[OwnerPublishedChannel] NUMERIC(20) NULL,
 	[PublishedChannel] NUMERIC(20) NULL,
+	[OwnerTwitchFeedChannel] NUMERIC(20) NULL,
+	[TwitchFeedChannel] NUMERIC(20) NULL,
 	[AllowEveryone] BIT NOT NULL,
 	[AllowThumbnails] BIT NOT NULL,
 	[AllowGreetings] BIT NOT NULL,
@@ -25,9 +25,6 @@
 	[UseTextAnnouncements] BIT NOT NULL,
 	[DeleteWhenOffline] BIT NOT NULL,
 	[MentionRole] NUMERIC(20) NULL,
-	[OwnerVidMeChannel] NUMERIC(20) NULL,
-	[OwnerTwitchFeedChannel] NUMERIC(20) NULL,
-	[TwitchFeedChannel] NUMERIC(20) NULL,
 	[AllowChannelFeed] BIT NOT NULL,
 	[AllowOwnerChannelFeed] BIT NOT NULL,
 	[StreamOfflineMessage] NVARCHAR(512) NULL

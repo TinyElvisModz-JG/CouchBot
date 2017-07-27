@@ -70,7 +70,6 @@
     <Build Include="Discord\Server.sql" />
     <Build Include="Discord\ServerChannel.sql" />
     <Build Include="Discord\ServerUser.sql" />
-    <Build Include="Discord\User.sql" />
     <Build Include="Live\Queue.sql" />
     <Build Include="Platform\Channel.sql" />
     <Build Include="Platform\Platform.sql" />
@@ -79,5 +78,12 @@
     <Build Include="Schemas\Live.sql" />
     <Build Include="Schemas\Platform.sql" />
     <PostDeploy Include="Script.PostDeployment1.sql" />
+    <Build Include="Platform\Game.sql" />
+    <Build Include="Platform\Team.sql" />
+    <Build Include="Discord\ServerGame.sql" />
+    <Build Include="Discord\ServerTeam.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="MTD.CouchBot.Data.refactorlog" />
   </ItemGroup>
 </Project>

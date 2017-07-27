@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="Dtos\Platform\Game.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Discord.Net" Version="1.0.2-build-00800" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
   </ItemGroup>

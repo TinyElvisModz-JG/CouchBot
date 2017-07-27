@@ -1,5 +1,6 @@
-﻿CREATE TABLE [Activity].[FunEventType]
+﻿CREATE TABLE [Platform].[Game]
 (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY,
+	[GameId] INT NOT NULL,
 	[Name] NVARCHAR(64) NOT NULL
 )
