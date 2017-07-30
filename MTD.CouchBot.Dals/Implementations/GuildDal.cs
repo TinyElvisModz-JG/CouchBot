@@ -35,5 +35,17 @@ namespace MTD.CouchBot.Dals.Implementations
         {
             return await _couchDbContext.Guilds.FirstOrDefaultAsync(g => g.GuildId.Equals(id));
         }
+
+        public async Task RemoveGuild(Guild guild)
+        {
+            _couchDbContext.Guilds.Remove(guild);
+            await _couchDbContext.SaveChangesAsync();
+        }
+
+        public async Task UpdateGuild(Guild guild)
+        {
+            _couchDbContext.Guilds.Update(guild);
+            await _couchDbContext.SaveChangesAsync();
+        }
     }
 }

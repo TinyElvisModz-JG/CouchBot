@@ -25,7 +25,7 @@ namespace MTD.CouchBot.Domain.Dtos.Discord
         public bool AllowLive { get; set; }
         public bool AllowOwnerChannelFeed { get; set; }
         public bool AllowChannelFeed { get; set; }
-        public float TimeZoneOffset { get; set; }
+        public double TimeZoneOffset { get; set; }
         public bool YtgDomainPublished { get; set; }
         public bool DeleteWhenOffline { get; set; }
         public string MentionRole { get; set; }

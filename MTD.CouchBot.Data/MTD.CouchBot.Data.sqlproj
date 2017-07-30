@@ -89,5 +89,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="MTD.CouchBot.Data.publish.xml" />
+    <None Include="CouchBot_LOCAL.publish.xml" />
   </ItemGroup>
 </Project>

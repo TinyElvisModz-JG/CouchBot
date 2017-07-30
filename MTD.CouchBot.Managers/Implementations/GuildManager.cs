@@ -31,5 +31,15 @@ namespace MTD.CouchBot.Managers.Implementations
         {
             return await _guildDal.GetGuildById(id);
         }
+
+        public async Task RemoveGuild(Guild guild)
+        {
+            await _guildDal.RemoveGuild(guild);
+        }
+
+        public async Task UpdateGuild(Guild guild)
+        {
+            await _guildDal.UpdateGuild(guild);
+        }
     }
 }

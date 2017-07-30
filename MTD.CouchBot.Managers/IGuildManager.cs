@@ -11,5 +11,7 @@ namespace MTD.CouchBot.Managers
         Task<Guild> AddNewGuild(Guild newGuild);
         Task<List<Guild>> GetAllGuilds();
         Task<Guild> GetGuildById(string id);
+        Task RemoveGuild(Guild guild);
+        Task UpdateGuild(Guild guild);
     }
 }
