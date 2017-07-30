@@ -1,8 +1,12 @@
 ﻿{
   "BotSettings": {
-    "Prefix": "PREFIX"
+    "Prefix": "!fb"
   },
   "Credentials": {
-    "DiscordToken": "TOKEN"
+    "DiscordToken": "MzEzODYxODEwMzQyMDY4MjI1.DF0pvw.f6gB3PLBV7t0j0smWWfxFfkjiR4"
+  },
+  "ConnectionStrings": {
+    "CouchDb": "Server =./; Database = CouchBot_LOCAL; Trusted_Connection = True; MultipleActiveResultSets=true",
+    "CouchBoDbLogging": "Server =./; Database = CouchBot_LOCAL.Logging; Trusted_Connection = True; "
   }
 }

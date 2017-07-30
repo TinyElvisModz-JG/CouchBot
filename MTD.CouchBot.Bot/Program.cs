@@ -6,13 +6,14 @@ using Microsoft.Extensions.DependencyInjection;
 using MTD.CouchBot.Bot.Services;
 using MTD.CouchBot.Dals;
 using MTD.CouchBot.Dals.Implementations;
-using MTD.CouchBot.Domain;
+using MTD.CouchBot.Data.EF;
 using MTD.CouchBot.Managers;
 using MTD.CouchBot.Managers.Implementations;
 using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace MTD.CouchBot.Bot
 {
@@ -73,6 +74,7 @@ namespace MTD.CouchBot.Bot
 
             var services = ConfigureServices();
             await services.GetRequiredService<CommandHandlingService>().Initialize(services);
+            await services.GetRequiredService<GuildInteractionService>().Initialize(services);
 
             _statisticsManager = services.GetService<StatisticsManager>();
             _youtubeManager = services.GetService<YouTubeManager>();
@@ -82,30 +84,30 @@ namespace MTD.CouchBot.Bot
             _picartoManager = services.GetService<PicartoManager>();
             _vidMeManager = services.GetService<VidMeManager>();
 
-            if (Constants.EnableTwitch)
-            {
-                QueueTwitchChecks();
-            }
+            //if (Constants.EnableTwitch)
+            //{
+            //    QueueTwitchChecks();
+            //}
 
-            if (Constants.EnableYouTube)
-            {
-                QueueYouTubeChecks();
-            }
+            //if (Constants.EnableYouTube)
+            //{
+            //    QueueYouTubeChecks();
+            //}
 
-            if (Constants.EnableSmashcast)
-            {
-                QueueHitboxChecks();
-            }
+            //if (Constants.EnableSmashcast)
+            //{
+            //    QueueHitboxChecks();
+            //}
 
-            if (Constants.EnablePicarto)
-            {
-                QueuePicartoChecks();
-            }
+            //if (Constants.EnablePicarto)
+            //{
+            //    QueuePicartoChecks();
+            //}
 
-            if (Constants.EnableVidMe)
-            {
-                QueueVidMeChecks();
-            }
+            //if (Constants.EnableVidMe)
+            //{
+            //    QueueVidMeChecks();
+            //}
 
             await _client.LoginAsync(TokenType.Bot, _config.GetSection("Credentials")["DiscordToken"]);
             await _client.StartAsync();
@@ -124,6 +126,8 @@ namespace MTD.CouchBot.Bot
         private IServiceProvider ConfigureServices()
         {
             return new ServiceCollection()
+                // Database
+                .AddDbContext<CouchDbContext>(db => db.UseSqlServer(_config.GetSection("ConnectionStrings")["CouchDb"]))
                 // Discord
                 .AddSingleton(_client)
                 .AddSingleton<CommandService>()
@@ -138,6 +142,7 @@ namespace MTD.CouchBot.Bot
                 .AddTransient<ITwitchDal, TwitchDal>()
                 .AddTransient<IVidMeDal, VidMeDal>()
                 .AddTransient<IYouTubeDal, YouTubeDal>()
+                .AddTransient<IGuildDal, GuildDal>()
                 // Dals
                 .AddTransient<IApiAiManager, ApiAiManager>()
                 .AddTransient<IMixerManager, MixerManager>()
@@ -148,6 +153,8 @@ namespace MTD.CouchBot.Bot
                 .AddTransient<ITwitchManager, TwitchManager>()
                 .AddTransient<IVidMeManager, VidMeManager>()
                 .AddTransient<IYouTubeManager, YouTubeManager>()
+                .AddTransient<IGuildManager, GuildManager>()
+                .AddSingleton<GuildInteractionService>()
                 // Misc
                 .AddSingleton(_config)
                 .BuildServiceProvider();

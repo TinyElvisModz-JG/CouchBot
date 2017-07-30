@@ -1,4 +1,4 @@
-﻿CREATE TABLE [Activity].[FunEventType]
+﻿CREATE TABLE [Activity].[ActivityType]
 (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY,
 	[Name] NVARCHAR(64) NOT NULL

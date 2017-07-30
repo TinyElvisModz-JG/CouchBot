@@ -2,8 +2,8 @@
 
 namespace MTD.CouchBot.Domain.Dtos.Activity
 {
-    [Table("FunEventType", Schema = "Activity")]
-    public class FunEventType
+    [Table("ActivityType", Schema = "Activity")]
+    public class ActivityType
     {
         public int Id { get; set; }
         public string Name { get; set; }

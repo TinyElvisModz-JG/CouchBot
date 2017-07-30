@@ -1,0 +1,6 @@
+﻿CREATE TABLE [Discord].[User]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY,
+	[UserId] VARCHAR(24) NOT NULL,
+	[CreatedDate] DATETIME NOT NULL
+)

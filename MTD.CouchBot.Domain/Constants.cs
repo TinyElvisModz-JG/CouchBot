@@ -1,4 +1,5 @@
 ﻿using Discord;
+using MTD.CouchBot.Domain.Dtos.Discord;
 using MTD.CouchBot.Domain.Models.Bot;
 using Newtonsoft.Json;
 using System.IO;

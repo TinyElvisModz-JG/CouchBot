@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MTD.CouchBot.Domain.Dtos.Discord;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MTD.CouchBot.Domain.Dtos.Platform
@@ -11,5 +13,7 @@ namespace MTD.CouchBot.Domain.Dtos.Platform
         public string ChannelId { get; set; }
         public DateTime CreatedDate { get; set; }
         public Platform Platform { get; set; }
+
+        public List<GuildChannel> GuildChannels { get; set; }
     }
 }

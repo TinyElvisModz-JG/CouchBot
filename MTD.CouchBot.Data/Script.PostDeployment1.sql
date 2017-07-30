@@ -6,7 +6,7 @@ INSERT INTO [Platform].[Platform] VALUES ('Vidme')
 INSERT INTO [Platform].[Platform] VALUES ('YouTube')
 INSERT INTO [Platform].[Platform] VALUES ('YouTube Gaming')
 
-INSERT INTO [Activity].[FunEventType] VALUES ('Flip')
-INSERT INTO [Activity].[FunEventType] VALUES ('Unflip')
-INSERT INTO [Activity].[FunEventType] VALUES ('Haibai')
+INSERT INTO [Activity].[ActivityType] VALUES ('Flip')
+INSERT INTO [Activity].[ActivityType] VALUES ('Unflip')
+INSERT INTO [Activity].[ActivityType] VALUES ('Haibai')
 

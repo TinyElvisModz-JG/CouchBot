@@ -1,20 +1,22 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MTD.CouchBot.Domain.Dtos.Discord
 {
-    [Table("Server", Schema = "Discord")]
-    public class Server
+    [Table("Guild", Schema = "Discord")]
+    public class Guild
     {
-        public ulong Id { get; set; }
-        public ulong OwnerId { get; set; }
-        public ulong AnnouncementsChannel { get; set; }
-        public ulong LiveChannel { get; set; }
-        public ulong PublishedChannel { get; set; }
-        public ulong OwnerLiveChannel { get; set; }
-        public ulong OwnerPublishedChannel { get; set; }
-        public ulong GreetingsChannel { get; set; }
-        public ulong OwnerTwitchFeedChannel { get; set; }
-        public ulong TwitchFeedChannel { get; set; }
+        public int Id { get; set; }
+        public string GuildId { get; set; }
+        public string OwnerId { get; set; }
+        public string AnnouncementsChannel { get; set; }
+        public string LiveChannel { get; set; }
+        public string PublishedChannel { get; set; }
+        public string OwnerLiveChannel { get; set; }
+        public string OwnerPublishedChannel { get; set; }
+        public string GreetingsChannel { get; set; }
+        public string OwnerTwitchFeedChannel { get; set; }
+        public string TwitchFeedChannel { get; set; }
         public bool AllowEveryone { get; set; }
         public bool AllowThumbnails { get; set; }
         public bool AllowGreetings { get; set; }
@@ -26,12 +28,15 @@ namespace MTD.CouchBot.Domain.Dtos.Discord
         public float TimeZoneOffset { get; set; }
         public bool YtgDomainPublished { get; set; }
         public bool DeleteWhenOffline { get; set; }
-        public ulong MentionRole { get; set; }
+        public string MentionRole { get; set; }
         public bool UseTextAnnouncements { get; set; }
         public string GreetingMessage { get; set; }
         public string GoodbyeMessage { get; set; }
         public string LiveMessage { get; set; }
         public string PublishedMessage { get; set; }
         public string StreamOfflineMessage { get; set; }
+
+        public List<GuildChannel> GuildChannels { get; set; }
+        public List<GuildUser> GuildUsers { get; set; }
     }
 }

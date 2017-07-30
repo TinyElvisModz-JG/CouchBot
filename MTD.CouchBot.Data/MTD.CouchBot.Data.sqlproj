@@ -8,7 +8,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{3b9f6e7a-4340-4f9c-84cf-335b8bbe55f5}</ProjectGuid>
-    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql120DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
@@ -64,12 +64,12 @@
     <Folder Include="Schemas" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="Activity\FunEvent.sql" />
-    <Build Include="Activity\FunEventType.sql" />
+    <Build Include="Activity\Activity.sql" />
+    <Build Include="Activity\ActivityType.sql" />
     <Build Include="Activity\LiveNotification.sql" />
-    <Build Include="Discord\Server.sql" />
-    <Build Include="Discord\ServerChannel.sql" />
-    <Build Include="Discord\ServerUser.sql" />
+    <Build Include="Discord\Guild.sql" />
+    <Build Include="Discord\GuildChannel.sql" />
+    <Build Include="Discord\GuildUser.sql" />
     <Build Include="Live\Queue.sql" />
     <Build Include="Platform\Channel.sql" />
     <Build Include="Platform\Platform.sql" />
@@ -80,10 +80,14 @@
     <PostDeploy Include="Script.PostDeployment1.sql" />
     <Build Include="Platform\Game.sql" />
     <Build Include="Platform\Team.sql" />
-    <Build Include="Discord\ServerGame.sql" />
-    <Build Include="Discord\ServerTeam.sql" />
+    <Build Include="Discord\GuildGame.sql" />
+    <Build Include="Discord\GuildTeam.sql" />
+    <Build Include="Discord\User.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="MTD.CouchBot.Data.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="MTD.CouchBot.Data.publish.xml" />
   </ItemGroup>
 </Project>
