@@ -9,7 +9,7 @@ namespace MTD.CouchBot.Managers.Implementations
     {
         private readonly IVidMeDal _vidMeDal;
 
-        public VidMeManager(VidMeDal vidMeDal)
+        public VidMeManager(IVidMeDal vidMeDal)
         {
             _vidMeDal = vidMeDal;
         }

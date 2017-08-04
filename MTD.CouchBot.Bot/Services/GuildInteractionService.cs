@@ -81,6 +81,7 @@ namespace MTD.CouchBot.Bot.Services
 
         private async Task JoinedGuild(SocketGuild arg)
         {
+            // TODO MS - Users on Join.
             var existingGuild = await _guildManager.GetGuildById(arg.Id.ToString());
 
             if (existingGuild == null)
@@ -116,6 +117,33 @@ namespace MTD.CouchBot.Bot.Services
                     TwitchFeedChannel = "0",
                     GuildId = arg.Id.ToString()
                 };
+
+                foreach (var user in arg.Users)
+                {
+                    var existingUser = await _guildManager.GetUserByUserId(user.Id.ToString());
+
+                    if (existingUser == null)
+                    {
+                        existingUser = new User
+                        {
+                            CreatedDate = DateTime.UtcNow,
+                            UserId = user.Id.ToString()
+                        };
+
+                        existingUser = await _guildManager.AddNewUser(existingUser);
+                    }
+
+                    if (existingGuild.GuildUsers == null)
+                    {
+                        existingGuild.GuildUsers = new List<GuildUser>();
+                    }
+
+                    existingGuild.GuildUsers.Add(new GuildUser
+                    {
+                        GuildId = existingGuild.Id,
+                        UserId = existingUser.Id
+                    });
+                }
 
                 await _guildManager.AddNewGuild(guild);
             }

@@ -11,7 +11,7 @@ namespace MTD.CouchBot.Managers.Implementations
     {
         private readonly ITwitchDal _twitchDal;
 
-        public TwitchManager(TwitchDal twitchDal)
+        public TwitchManager(ITwitchDal twitchDal)
         {
             _twitchDal = twitchDal;
         }

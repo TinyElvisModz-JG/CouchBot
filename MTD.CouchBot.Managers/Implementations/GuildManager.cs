@@ -22,6 +22,11 @@ namespace MTD.CouchBot.Managers.Implementations
             return await _guildDal.AddNewGuild(newGuild);
         }
 
+        public async Task<User> AddNewUser(User user)
+        {
+            return await _guildDal.AddNewUser(user);
+        }
+
         public async Task<List<Guild>> GetAllGuilds()
         {
             return await _guildDal.GetAllGuilds();
@@ -30,6 +35,16 @@ namespace MTD.CouchBot.Managers.Implementations
         public async Task<Guild> GetGuildById(string id)
         {
             return await _guildDal.GetGuildById(id);
+        }
+
+        public async Task<List<Guild>> GetGuildsForLive()
+        {
+            return await _guildDal.GetGuildsForLive();
+        }
+
+        public async Task<User> GetUserByUserId(string userId)
+        {
+            return await _guildDal.GetUserByUserId(userId);
         }
 
         public async Task RemoveGuild(Guild guild)

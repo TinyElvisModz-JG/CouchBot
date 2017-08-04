@@ -13,5 +13,8 @@ namespace MTD.CouchBot.Dals
         Task<Guild> GetGuildById(string id);
         Task RemoveGuild(Guild guild);
         Task UpdateGuild(Guild guild);
+        Task<List<Guild>> GetGuildsForLive();
+        Task<User> GetUserByUserId(string userId);
+        Task<User> AddNewUser(User user);
     }
 }

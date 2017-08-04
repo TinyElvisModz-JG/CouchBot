@@ -9,7 +9,7 @@ namespace MTD.CouchBot.Managers.Implementations
     {
         private readonly ISmashcastDal _smashcastDal;
 
-        public SmashcastManager(SmashcastDal smashcastDal)
+        public SmashcastManager(ISmashcastDal smashcastDal)
         {
             _smashcastDal = smashcastDal;
         }

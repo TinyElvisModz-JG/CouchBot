@@ -9,7 +9,7 @@ namespace MTD.CouchBot.Managers.Implementations
     {
         private readonly IApiAiDal _apiAiDal;
 
-        public ApiAiManager(ApiAiDal apiAiDal)
+        public ApiAiManager(IApiAiDal apiAiDal)
         {
             _apiAiDal = apiAiDal;
         }

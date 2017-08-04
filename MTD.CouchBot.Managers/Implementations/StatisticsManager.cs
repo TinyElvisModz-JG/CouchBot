@@ -9,7 +9,7 @@ namespace MTD.CouchBot.Managers.Implementations
     {
         private readonly IStatisticsDal _statisticsDal;
 
-        public StatisticsManager(StatisticsDal statisticsDal)
+        public StatisticsManager(IStatisticsDal statisticsDal)
         {
             _statisticsDal = statisticsDal;
         }

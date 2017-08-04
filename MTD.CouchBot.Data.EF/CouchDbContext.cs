@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MTD.CouchBot.Domain.Dtos.Bot;
 using MTD.CouchBot.Domain.Dtos.Discord;
+using MTD.CouchBot.Domain.Dtos.Live;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,6 +12,9 @@ namespace MTD.CouchBot.Data.EF
     {
         public DbSet<Guild> Guilds { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Configuration> Configuration { get; set; }
+        public DbSet<Statistics> Statististics { get; set; }
+        public DbSet<Queue> LiveQueue { get; set; }
 
         public CouchDbContext(DbContextOptions<CouchDbContext> contextOptions)
             : base(contextOptions) { }

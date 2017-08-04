@@ -1,19 +1,19 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MTD.CouchBot.Bot.Services;
 using MTD.CouchBot.Dals;
 using MTD.CouchBot.Dals.Implementations;
 using MTD.CouchBot.Data.EF;
+using MTD.CouchBot.Domain.Dtos.Bot;
 using MTD.CouchBot.Managers;
 using MTD.CouchBot.Managers.Implementations;
 using System;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 
 namespace MTD.CouchBot.Bot
 {
@@ -23,30 +23,8 @@ namespace MTD.CouchBot.Bot
         private DiscordShardedClient _client;
         private IConfiguration _config;
 
-        // Timers
-        private static Timer _smashcastTimer;
-        private static Timer _smashcastOwnerTimer;
-                             
-        private static Timer _twitchTimer;
-        private static Timer _twitchOwnerTimer;
-        private static Timer _twitchFeedTimer;
-        private static Timer _twitchOwnerFeedTimer;
-        private static Timer _twitchTeamTimer;
-        private static Timer _twitchGameTimer;
-                             
-        private static Timer _youtubeTimer;
-        private static Timer _youtubeOwnerTimer;
-        private static Timer _youtubePublishedTimer;
-        private static Timer _youtubePublishedOwnerTimer;
-                             
-        private static Timer _picartoTimer;
-        private static Timer _picartoOwnerTimer;
-                             
-        private static Timer _vidMeTimer;
-        private static Timer _vidMeOwnerTimer;
-                             
-        private static Timer _cleanupTimer;
-        private static Timer _uptimeTimer;
+        // Bot
+        private Configuration _botConfig;
 
         // Managers
         IStatisticsManager _statisticsManager;
@@ -56,6 +34,7 @@ namespace MTD.CouchBot.Bot
         IMixerManager _mixerManager;
         IPicartoManager _picartoManager;
         IVidMeManager _vidMeManager;
+        IBotManager _botManager;
 
         static void Main(string[] args) => new Program().Start().GetAwaiter().GetResult();
 
@@ -75,39 +54,43 @@ namespace MTD.CouchBot.Bot
             var services = ConfigureServices();
             await services.GetRequiredService<CommandHandlingService>().Initialize(services);
             await services.GetRequiredService<GuildInteractionService>().Initialize(services);
+            var schedulingService = services.GetRequiredService<SchedulingService>();
 
-            _statisticsManager = services.GetService<StatisticsManager>();
-            _youtubeManager = services.GetService<YouTubeManager>();
-            _twitchManager = services.GetService<TwitchManager>();
-            _smashcastManager = services.GetService<SmashcastManager>();
-            _mixerManager = services.GetService<MixerManager>();
-            _picartoManager = services.GetService<PicartoManager>();
-            _vidMeManager = services.GetService<VidMeManager>();
+            _statisticsManager = services.GetService<IStatisticsManager>();
+            _youtubeManager = services.GetService<IYouTubeManager>();
+            _twitchManager = services.GetService<ITwitchManager>();
+            _smashcastManager = services.GetService<ISmashcastManager>();
+            _mixerManager = services.GetService<IMixerManager>();
+            _picartoManager = services.GetService<IPicartoManager>();
+            _vidMeManager = services.GetService<IVidMeManager>();
+            _botManager = services.GetService<IBotManager>();
 
-            //if (Constants.EnableTwitch)
-            //{
-            //    QueueTwitchChecks();
-            //}
+            _botConfig = await _botManager.GetConfiguration();
 
-            //if (Constants.EnableYouTube)
-            //{
-            //    QueueYouTubeChecks();
-            //}
+            if (_botConfig.EnableTwitch)
+            {
+                schedulingService.QueueTwitchChecks();
+            }
 
-            //if (Constants.EnableSmashcast)
-            //{
-            //    QueueHitboxChecks();
-            //}
+            if (_botConfig.EnableYouTube)
+            {
+                schedulingService.QueueYouTubeChecks();
+            }
 
-            //if (Constants.EnablePicarto)
-            //{
-            //    QueuePicartoChecks();
-            //}
+            if (_botConfig.EnableSmashcast)
+            {
+                schedulingService.QueueSmashcastChecks();
+            }
 
-            //if (Constants.EnableVidMe)
-            //{
-            //    QueueVidMeChecks();
-            //}
+            if (_botConfig.EnablePicarto)
+            {
+                schedulingService.QueuePicartoChecks();
+            }
+
+            if (_botConfig.EnableVidMe)
+            {
+                schedulingService.QueueVidMeChecks();
+            }
 
             await _client.LoginAsync(TokenType.Bot, _config.GetSection("Credentials")["DiscordToken"]);
             await _client.StartAsync();
@@ -132,6 +115,9 @@ namespace MTD.CouchBot.Bot
                 .AddSingleton(_client)
                 .AddSingleton<CommandService>()
                 .AddSingleton<CommandHandlingService>()
+                .AddSingleton<LoggingService>()
+                .AddSingleton<GuildInteractionService>()
+                .AddSingleton<MessagingService>()
                 // Managers
                 .AddTransient<IApiAiDal, ApiAiDal>()
                 .AddTransient<IMixerDal, MixerDal>()
@@ -143,6 +129,7 @@ namespace MTD.CouchBot.Bot
                 .AddTransient<IVidMeDal, VidMeDal>()
                 .AddTransient<IYouTubeDal, YouTubeDal>()
                 .AddTransient<IGuildDal, GuildDal>()
+                .AddTransient<IBotDal, BotDal>()
                 // Dals
                 .AddTransient<IApiAiManager, ApiAiManager>()
                 .AddTransient<IMixerManager, MixerManager>()
@@ -154,7 +141,7 @@ namespace MTD.CouchBot.Bot
                 .AddTransient<IVidMeManager, VidMeManager>()
                 .AddTransient<IYouTubeManager, YouTubeManager>()
                 .AddTransient<IGuildManager, GuildManager>()
-                .AddSingleton<GuildInteractionService>()
+                .AddTransient<IBotManager, BotManager>()
                 // Misc
                 .AddSingleton(_config)
                 .BuildServiceProvider();

@@ -9,7 +9,7 @@ namespace MTD.CouchBot.Managers.Implementations
     {
         private readonly IPicartoDal _picartoDal;
 
-        public PicartoManager(PicartoDal picartoDal)
+        public PicartoManager(IPicartoDal picartoDal)
         {
             _picartoDal = picartoDal;
         }
