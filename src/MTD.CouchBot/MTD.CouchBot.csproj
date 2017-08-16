@@ -28,7 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\MTD.CouchBot.Data.EF\MTD.CouchBot.Data.EF.csproj" />
     <ProjectReference Include="..\MTD.CouchBot.Domain\MTD.CouchBot.Domain.csproj" />
     <ProjectReference Include="..\MTD.CouchBot.Managers\MTD.CouchBot.Managers.csproj" />
   </ItemGroup>

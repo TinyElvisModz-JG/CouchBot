@@ -99,31 +99,12 @@ namespace MTD.CouchBot.Domain.Models.YouTube
             public string defaultAudioLanguage { get; set; }
         }
 
-        public class Statistics
-        {
-            public string viewCount { get; set; }
-            public string likeCount { get; set; }
-            public string dislikeCount { get; set; }
-            public string favoriteCount { get; set; }
-            public string commentCount { get; set; }
-        }
-
-        public class LiveStreamingDetails
-        {
-            public string actualStartTime { get; set; }
-            public string scheduledStartTime { get; set; }
-            public string concurrentViewers { get; set; }
-            public string activeLiveChatId { get; set; }
-        }
-
         public class Item
         {
             public string kind { get; set; }
             public string etag { get; set; }
             public string id { get; set; }
             public Snippet snippet { get; set; }
-            public Statistics statistics { get; set; }
-            public LiveStreamingDetails liveStreamingDetails { get; set; }
         }
     }
 }
