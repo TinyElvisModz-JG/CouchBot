@@ -40,7 +40,6 @@ namespace MTD.CouchBot
         private static Timer hitboxTimer;
         private static Timer hitboxOwnerTimer;
         private static Timer twitchTimer;
-        //private static Timer twitchOwnerTimer;
         private static Timer youtubeTimer;
         private static Timer youtubeOwnerTimer;
         private static Timer youtubePublishedTimer;
@@ -295,16 +294,6 @@ namespace MTD.CouchBot
                 initialServicesRan = true;
             }, null, 0, Constants.TwitchInterval);
 
-            //twitchOwnerTimer = new Timer(async (e) =>
-            //{
-            //    Stopwatch sw = new Stopwatch();
-            //    sw.Start();
-            //    Logging.LogTwitch("Checking Owner Twitch Channels.");
-            //    await CheckOwnerTwitchLive();
-            //    sw.Stop();
-            //    Logging.LogTwitch("Owner Twitch Check Complete - Elapsed Runtime: " + sw.ElapsedMilliseconds + " milliseconds.");
-            //}, null, 0, Constants.TwitchInterval);
-
             twitchFeedTimer = new Timer(async (e) =>
             {
                 Stopwatch sw = new Stopwatch();
@@ -538,7 +527,12 @@ namespace MTD.CouchBot
                 {
                     foreach (var c in server.ServerTwitchChannelIds)
                     {
-                        var channelServerModel = twitchChannelList.FirstOrDefault(x => x.TwitchChannelId.Equals(c, StringComparison.CurrentCultureIgnoreCase));
+                        if(c == null)
+                        {
+                            continue;
+                        }
+
+                        var channelServerModel = twitchChannelList.Count == 0 ? null : twitchChannelList.FirstOrDefault(x => x.TwitchChannelId.Equals(c, StringComparison.CurrentCultureIgnoreCase));
 
                         if (channelServerModel == null)
                         {
@@ -735,110 +729,6 @@ namespace MTD.CouchBot
 
             return lists;
         }
-
-        //public async Task CheckOwnerTwitchLive()
-        //{
-        //    var servers = BotFiles.GetConfiguredServers();
-        //    var liveChannels = BotFiles.GetCurrentlyLiveTwitchChannels();
-
-        //    // Loop through servers to broadcast.
-        //    foreach (var server in servers)
-        //    {
-        //        if (!server.AllowLive)
-        //        {
-        //            continue;
-        //        }
-
-        //        if (server.Id != 0 && server.OwnerLiveChannel != 0 &&
-        //            !string.IsNullOrEmpty(server.OwnerTwitchChannel) && !string.IsNullOrEmpty(server.OwnerTwitchChannelId))
-        //        {
-        //            TwitchStreamV5 twitchStream = null;
-
-        //            try
-        //            {
-        //                // Query Twitch for our stream.
-        //                twitchStream = await twitchManager.GetStreamById(server.OwnerTwitchChannelId);
-        //            }
-        //            catch (Exception wex)
-        //            {
-        //                // Log our error and move to the next user.
-
-        //                Logging.LogError("Twitch Server Error: " + wex.Message + " in Discord Server Id: " + server.Id);
-        //                continue;
-        //            }
-
-        //            if (twitchStream == null || twitchStream.stream == null)
-        //            {
-        //                continue;
-        //            }
-
-        //            var stream = twitchStream.stream;
-
-        //            // Get currently live channel from Live/Twitch, if it exists.
-        //            var channel = liveChannels.FirstOrDefault(x => x.Name == stream._id.ToString());
-
-        //            if (stream != null)
-        //            {
-        //                var chat = await DiscordHelper.GetMessageChannel(server.Id, server.OwnerLiveChannel);
-
-        //                if (chat == null)
-        //                {
-        //                    continue;
-        //                }
-
-        //                bool checkChannelBroadcastStatus = channel == null || !channel.Servers.Contains(server.Id);
-        //                bool checkGoLive = !string.IsNullOrEmpty(server.OwnerLiveChannel.ToString()) && server.OwnerLiveChannel != 0;
-
-        //                if (checkChannelBroadcastStatus)
-        //                {
-        //                    if (checkGoLive)
-        //                    {
-        //                        if (channel == null)
-        //                        {
-        //                            channel = new LiveChannel()
-        //                            {
-        //                                Name = stream.channel._id.ToString(),
-        //                                Servers = new List<ulong>()
-        //                            };
-
-        //                            channel.Servers.Add(server.Id);
-
-        //                            liveChannels.Add(channel);
-        //                        }
-        //                        else
-        //                        {
-        //                            channel.Servers.Add(server.Id);
-        //                        }
-
-        //                        // Build our message
-        //                        string url = stream.channel.url;
-        //                        string channelName = StringUtilities.ScrubChatMessage(stream.channel.display_name);
-        //                        string avatarUrl = stream.channel.logo != null ? stream.channel.logo : "https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_70x70.png";
-        //                        string thumbnailUrl = stream.preview.large;
-
-        //                        var message = await MessagingHelper.BuildMessage(channelName, stream.game, stream.channel.status, url, avatarUrl,
-        //                            thumbnailUrl, Constants.Twitch, stream.channel._id.ToString(), server, server.OwnerLiveChannel, null);
-
-        //                        var finalCheck = BotFiles.GetCurrentlyLiveTwitchChannels().FirstOrDefault(x => x.Name == stream.channel._id.ToString());
-
-        //                        if (finalCheck == null || !finalCheck.Servers.Contains(server.Id))
-        //                        {
-        //                            if (channel.ChannelMessages == null)
-        //                                channel.ChannelMessages = new List<ChannelMessage>();
-
-        //                            channel.ChannelMessages.AddRange(await MessagingHelper.SendMessages(Constants.Twitch, new List<BroadcastMessage>() { message }));
-
-        //                            File.WriteAllText(Constants.ConfigRootDirectory + Constants.LiveDirectory + Constants.TwitchDirectory + stream.channel._id.ToString() + ".json",
-        //                                JsonConvert.SerializeObject(channel));
-
-        //                            Logging.LogTwitch(channelName + " has gone online.");
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
 
         public async Task CheckTwitchChannelFeeds()
         {
@@ -1283,8 +1173,9 @@ namespace MTD.CouchBot
                         string avatarUrl = channelData.items.Count > 0 ? channelData.items[0].snippet.thumbnails.high.url : "";
                         string thumbnailUrl = stream.snippet.thumbnails.high.url;
 
-                        var message = await MessagingHelper.BuildMessage(channelTitle, "a game", stream.snippet.title, url, avatarUrl, thumbnailUrl,
-                            Constants.YouTubeGaming, c.YouTubeChannelId, server, server.GoLiveChannel, null);
+                        var message = await MessagingHelper.BuildMessage(channelTitle, "a game", stream.snippet.title, 
+                            url, avatarUrl, thumbnailUrl, Constants.YouTubeGaming, c.YouTubeChannelId, server, 
+                            server.GoLiveChannel, null);
 
                         var finalCheck = BotFiles.GetCurrentlyLiveYouTubeChannels().FirstOrDefault(x => x.Name == c.YouTubeChannelId);
 
