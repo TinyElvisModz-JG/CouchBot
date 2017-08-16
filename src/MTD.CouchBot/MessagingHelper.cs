@@ -51,13 +51,27 @@ namespace MTD.CouchBot.Bot
             embed.Footer = footer;
 
             var role = await DiscordHelper.GetRoleByGuildAndId(server.Id, server.MentionRole);
+            var roleName = "";
 
             if (role == null)
             {
                 server.MentionRole = 0;
             }
 
-            var message = (server.AllowEveryone ? server.MentionRole != 0 ? role.Mention : "@everyone " : "");
+            if (server.MentionRole == 0)
+            {
+                roleName = "@everyone";
+            }
+            else if (server.MentionRole == 1)
+            {
+                roleName = "@here";
+            }
+            else
+            {
+                roleName = role.Mention;
+            }
+
+            var message = (server.AllowEveryone ? roleName + " " : "");
 
             if (server.UseTextAnnouncements)
             {
@@ -140,13 +154,27 @@ namespace MTD.CouchBot.Bot
             embed.Footer = footer;
 
             var role = await DiscordHelper.GetRoleByGuildAndId(server.Id, server.MentionRole);
+            var roleName = "";
 
-            if (role == null)
+            if (role == null && server.MentionRole != 1)
             {
                 server.MentionRole = 0;
             }
 
-            var message = (server.AllowEveryone ? server.MentionRole != 0 ? role.Mention : "@everyone " : "");
+            if (server.MentionRole == 0)
+            {
+                roleName = "@everyone";
+            }
+            else if (server.MentionRole == 1)
+            {
+                roleName = "@here";
+            }
+            else
+            {
+                roleName = role.Mention;
+            }
+
+            var message = (server.AllowEveryone ? roleName + " " : "");
 
             if (server.UseTextAnnouncements)
             {
@@ -229,13 +257,27 @@ namespace MTD.CouchBot.Bot
             embed.Footer = footer;
 
             var role = await DiscordHelper.GetRoleByGuildAndId(server.Id, server.MentionRole);
+            var roleName = "";
 
             if (role == null)
             {
                 server.MentionRole = 0;
             }
 
-            var message = (server.AllowEveryone ? server.MentionRole != 0 ? role.Mention : "@everyone " : "");
+            if (server.MentionRole == 0)
+            {
+                roleName = "@everyone";
+            }
+            else if (server.MentionRole == 1)
+            {
+                roleName = "@here";
+            }
+            else
+            {
+                roleName = role.Mention;
+            }
+
+            var message = (server.AllowEveryone ? roleName + " " : "");
 
             if (server.UseTextAnnouncements)
             {
@@ -254,7 +296,8 @@ namespace MTD.CouchBot.Bot
                 UserId = channelId,
                 Message = message,
                 Platform = platform,
-                Embed = (!server.UseTextAnnouncements ? embed.Build() : null)
+                Embed = (!server.UseTextAnnouncements ? embed.Build() : null),
+                DeleteOffline = server.DeleteWhenOffline
             };
 
             return broadcastMessage;
