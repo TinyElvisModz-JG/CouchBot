@@ -11,13 +11,13 @@ init:
 before_build:
 - appveyor-retry dotnet restore -v Minimal
 build_script:
-- dotnet build "src\MTD.CouchBot.Dals" 		-c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
 - dotnet build "src\MTD.CouchBot.Domain" 	-c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
+- dotnet build "src\MTD.CouchBot.Dals" 		-c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
 - dotnet build "src\MTD.CouchBot.Managers" 	-c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
 - dotnet build "src\MTD.CouchBot.Bot" 		-c %CONFIGURATION% --no-dependencies --version-suffix %LABEL%
 after_build:
-- dotnet pack "src\MTD.CouchBot.Dals" 		 -c %CONFIGURATION% --no-build --version-suffix %LABEL% -o artifacts
 - dotnet pack "src\MTD.CouchBot.Domain"  -c %CONFIGURATION% --no-build --version-suffix %LABEL% -o artifacts
+- dotnet pack "src\MTD.CouchBot.Dals" 		 -c %CONFIGURATION% --no-build --version-suffix %LABEL% -o artifacts
 - dotnet pack "src\MTD.CouchBot.Managers" -c %CONFIGURATION% --no-build --version-suffix %LABEL% -o artifacts
 - dotnet publish "src\MTD.CouchBot.Bot" -c %CONFIGURATION% --no-build --version-suffix %LABEL% -o artifacts\CouchBot
 artifacts:
