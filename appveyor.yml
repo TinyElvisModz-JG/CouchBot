@@ -19,6 +19,6 @@ after_build:
 - dotnet pack "src\MTD.CouchBot.Domain"  -c %CONFIGURATION% --no-build --version-suffix %LABEL% -o artifacts
 - dotnet pack "src\MTD.CouchBot.Dals" 		 -c %CONFIGURATION% --no-build --version-suffix %LABEL% -o artifacts
 - dotnet pack "src\MTD.CouchBot.Managers" -c %CONFIGURATION% --no-build --version-suffix %LABEL% -o artifacts
-- dotnet publish "src\MTD.CouchBot" -c %CONFIGURATION% -r win10-x64 --version-suffix %LABEL% -o artifacts\CouchBot
+- dotnet pack src\MTD.CouchBot -c Release -o .\artifacts --version-suffix %LABEL%
 artifacts:
-- path: artifacts\*.*
+- path: .\artifacts\*.*
