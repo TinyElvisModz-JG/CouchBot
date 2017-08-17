@@ -311,7 +311,7 @@ namespace MTD.CouchBot.Modules
               "- YouTube Gaming: " + youtubeLive + "\r\n" +
               "```\r\n";
 
-            await Context.Channel.SendMessageAsync(info);
+            await Context.Channel.SendMessageAsync(StringUtilities.ScrubChatMessage(info));
         }
     }
 }
