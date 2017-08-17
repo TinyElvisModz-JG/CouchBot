@@ -21,4 +21,4 @@ after_build:
 - dotnet pack "src\MTD.CouchBot.Managers" -c %CONFIGURATION% --no-build --version-suffix %LABEL% -o artifacts
 - dotnet publish "src\MTD.CouchBot" -c %CONFIGURATION% --version-suffix %LABEL% -o artifacts\CouchBot
 artifacts:
-- path: artifacts\**\*.*
+- path: *.*
