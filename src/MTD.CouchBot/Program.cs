@@ -192,6 +192,7 @@ namespace MTD.CouchBot
         {
             var count = 0;
             beamClient = new BeamClient();
+            var alreadyProcessed = new List<string>();
 
             Logging.LogMixer("Getting Server Files.");
 
@@ -217,14 +218,22 @@ namespace MTD.CouchBot
                 {
                     foreach (var b in s.ServerBeamChannelIds)
                     {
-                        await beamClient.SubscribeToLiveAnnouncements(b);
-                        count++;
+                        if (!alreadyProcessed.Contains(b))
+                        {
+                            await beamClient.SubscribeToLiveAnnouncements(b);
+                            count++;
+                            alreadyProcessed.Add(b);
+                        }
                     }
 
                     if (!string.IsNullOrEmpty(s.OwnerBeamChannelId))
                     {
-                        await beamClient.SubscribeToLiveAnnouncements(s.OwnerBeamChannelId);
-                        count++;
+                        if (!alreadyProcessed.Contains(s.OwnerBeamChannelId))
+                        {
+                            await beamClient.SubscribeToLiveAnnouncements(s.OwnerBeamChannelId);
+                            count++;
+                            alreadyProcessed.Add(s.OwnerBeamChannelId);
+                        }
                     }
                 }
             }
