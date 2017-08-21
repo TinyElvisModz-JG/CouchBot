@@ -581,7 +581,7 @@ namespace MTD.CouchBot
                                 TwitchChannelId = server.OwnerTwitchChannelId,
                                 Servers = new List<ServerOwnerModel>
                                 {
-                                        new ServerOwnerModel { ServerId = server.Id, IsOwner = false }
+                                        new ServerOwnerModel { ServerId = server.Id, IsOwner = true }
                                 }
                             });
                     }
@@ -590,7 +590,7 @@ namespace MTD.CouchBot
                         channelServerModel.Servers.Add(new ServerOwnerModel
                         {
                             ServerId = server.Id,
-                            IsOwner = false
+                            IsOwner = true
                         });
                     }
                 }
